@@ -50,7 +50,7 @@ elif DJANGO_ENV == 'test_cloud':
 else:
     SECRET_KEY = env('APP_SECRET_KEY')
     DEBUG = True
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = ['digitalquber-gxfbbnheb8esg6gk.centralindia-01.azurewebsites.net']
     # Static files (CSS, JavaScript, images)
     # STATICFILES_STORAGE = 'storages.backends.azure_storage.AzureStorage'
     # AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT_NAME')
