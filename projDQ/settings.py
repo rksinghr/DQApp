@@ -16,12 +16,19 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+if os.path.exists('.env'):
+    environ.Env.read_env('.env')
+    DJANGO_ENV = env('RUNTIME_ENV')
+else:
+    print("No .env file found")
+    DJANGO_ENV = 'prod'
+    # environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DJANGO_ENV = env('RUNTIME_ENV')
+
 
 if DJANGO_ENV == 'local':
     SECRET_KEY = env('APP_SECRET_KEY')
@@ -48,19 +55,20 @@ elif DJANGO_ENV == 'test_cloud':
         }
     }
 else:
-    SECRET_KEY = env('APP_SECRET_KEY')
-    DEBUG = True
-    ALLOWED_HOSTS = ['digitalquber-gxfbbnheb8esg6gk.centralindia-01.azurewebsites.net']
+    SECRET_KEY = env('APP_SECRET_KEY', default='django-insecure-^)l3)56iw4ma=p@d+d-zbsl2@wck$imcrwqj)0xgi%emc@%1%u')
+    DEBUG = False
+    ALLOWED_HOSTS = [env('ALLOWED_HOSTS')]
     # Static files (CSS, JavaScript, images)
-    # STATICFILES_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    # AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT_NAME')
-    # AZURE_ACCOUNT_KEY = env('AZURE_ACCOUNT_KEY')
-    # AZURE_CONTAINER = env('AZURE_CONTAINER')
+    STATICFILES_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+    AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT_NAME')
+    AZURE_ACCOUNT_KEY = env('AZURE_ACCOUNT_KEY')
+    AZURE_CONTAINER = env('AZURE_CONTAINER')
 
-    # # Media files
-    # DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    # AZURE_MEDIA_CONTAINER = env('AZURE_MEDIA_CONTAINER')
-
+    # Media files
+    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+    AZURE_MEDIA_CONTAINER = env('AZURE_MEDIA_CONTAINER')
+    
+    # Database
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -160,3 +168,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://myapp.azurewebsites.net'
+]
+
