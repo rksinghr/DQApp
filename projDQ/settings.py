@@ -23,7 +23,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 DJANGO_ENV = env('RUNTIME_ENV')
 
-if DJANGO_ENV == 'dev':
+if DJANGO_ENV == 'local':
     SECRET_KEY = env('APP_SECRET_KEY')
     DEBUG = True
     ALLOWED_HOSTS = []
@@ -33,7 +33,7 @@ if DJANGO_ENV == 'dev':
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-elif DJANGO_ENV == 'test':
+elif DJANGO_ENV == 'test_cloud':
     SECRET_KEY = env('APP_SECRET_KEY')
     DEBUG = True
     ALLOWED_HOSTS = []
